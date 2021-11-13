@@ -1,0 +1,84 @@
+/* BIBLIOTECA*/
+import java.text.ParseException;
+import java.io.*;
+
+public class PesquisaSequencial{
+	static int tamPubIn = 100;
+	static int tam1 = 0;
+	static int tam2 = 0;
+
+	/* MÉTODO PARA CONFERIR SE CHEGOU AO FIM DO ARQUIVO */
+	public static boolean conferirFim(String linha){ /* CONDIÇÃO DE PARADA */
+		boolean resp;
+		if(linha.length()==3 && linha.charAt(0)=='F' && linha.charAt(1)=='I' && linha.charAt(2)=='M'){
+			resp = true;
+		}else{
+			resp = false;
+		}
+		return resp;
+	}
+
+	/* PROCEDIMENTO PARA IMPRIMIR SIM OU NÃO */
+	public static void imprimirResposta(boolean resp){
+    	if(resp == true){
+    	    MyIO.println("SIM");
+    	}else{
+    	    MyIO.println("NÃO");
+    	}
+	}
+	
+	/* PROCEDIMENTO PARA REALIZAR A PESQUISA SEQUENCIAL POR MEIO DO NOME*/
+	public static boolean pesquisaSequencial(String[] linhas1, String[] linhas2){
+    	boolean resp = false;
+      	for(int i = 0; i < tam2; i++){
+      		resp = false;	
+      		for(int j = 0; j < tam1; j++){
+         		if(linhas2[i].compareTo(linhas1[j]) == 0){
+            		resp = true;
+            		j = tam1;
+         		}
+         	}
+      		imprimirResposta(resp);
+      	}
+      		
+      return resp;
+    }
+    
+    public static String[] tratarPubIn(String[] linhas){
+    	String[] linhasTratadas = new String[linhas.length];
+    	for(int i = 0; i < tam1; i++){
+    		linhas[i] = linhas[i].replace("_", " ");
+    		linhas[i] = linhas[i].replace(".html", "");
+    		linhasTratadas[i] = linhas[i];
+    	}
+    	return linhasTratadas;
+    }
+    
+    /* MÉTODO NECESSÁRIO PARA FAZER A LEITURA DO PUB.IN */
+    public static String[] lerPubIn(int i){
+    	String[] linhas = new String[tamPubIn];
+    	if(i == 1){ 
+        	linhas[tam1] = MyIO.readLine();
+        	while(conferirFim(linhas[tam1]) == false){ /* LEITURA DO ARQUIVO ENQUANTO ESSE NÃO CHEGAR NO FIM */
+				tam1++;
+            	linhas[tam1] = MyIO.readLine();
+			}
+		} else {
+        	linhas[tam2] = MyIO.readLine();
+        	while(conferirFim(linhas[tam2]) == false){ /* LEITURA DO ARQUIVO ENQUANTO ESSE NÃO CHEGAR NO FIM */
+				tam2++;
+            	linhas[tam2] = MyIO.readLine();
+			}
+		}
+		return linhas;
+	}
+
+	/* MAIN DO CODIGO QUE CHAMA O PRIMEIRO PROCEDIMENTO */
+	public static void main(String[] args)throws ParseException{
+		String[] linhas1 = lerPubIn(1);
+		String[] linhasTratadas = tratarPubIn(linhas1);
+		String[] linhas2 = lerPubIn(2);
+		pesquisaSequencial(linhasTratadas, linhas2);
+	}
+	
+}
